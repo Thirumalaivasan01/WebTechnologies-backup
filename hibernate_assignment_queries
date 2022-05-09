@@ -1,0 +1,45 @@
+create database hibernate_assignment;
+
+use hibernate_assignment
+
+create table actor_table(actor_id int not null auto_increment  primary key, actor_name varchar(20), actor_gender varchar(10));
+
+
+create table director_table(director_id int not null auto_increment primary key, director_name varchar(20), director_phone varchar(10));
+
+create table movie_table(movie_id int not null auto_increment primary key, movie_title varchar(20), movie_year int, movie_language varchar(20),director_id int );
+
+create table movie_table(movie_id int not null auto_increment primary key, movie_title varchar(20), movie_year int, movie_language varchar(20),director_id int );
+
+create table movie_cast_table(actor_id int,movie_id int, role varchar(20));
+
+alter table movie_cast_table add constraint actor_id foreign key (actor_id) references actor_table(actor_id);
+
+alter table movie_cast_table add constraint movie_id foreign key (movie_id) references movie_table(movie_id);
+
+create table movie_rating_table(movie_id int, review_stars int not null check(review_stars between 0 and 5));
+
+alter table movie_rating_table add foreign key(movie_id) references movie_table(movie_id);
+
+
+=======================================
+select movie_title from movie_table join director_table on director_table.director_id=movie_table.director_id where director_name="mani rathnam";
+
+select actor_name from actor_table join movie_cast_table on actor_table.actor_id=movie_cast_table.actor_id join movie_table on movie_cast_table.movie_id=movie_table.movie_id where movie_year<2000;
+
+select actor_name from actor_table join movie_cast_table on actor_table.actor_id=movie_cast_table.actor_id join movie_table on movie_cast_table.movie_id=movie_table.movie_id where movie_year>2015;
+
+select movie_title from movie_table,movie_cast_table where movie_table.movie_id=movie_cast_table.movie_id and actor_id in (select actor_id from movie_cast_table group by actor_id having count(actor_id)>1) group by movie_title having count(movie_title)>1;
+
+select movie_title,review_stars from movie_table join movie_rating_table on movie_table.movie_id=movie_rating_table.movie_id where movie_rating_table.review_stars>1 order by movie_table.movie_title;
+
+
+update movie_rating_table join movie_table on movie_rating_table.movie_id=movie_table.movie_id join director_table on director_table.director_id=movie_table.director_id set review_stars=5 where director_name="nelson";
+
+============================================
+using sub query for 3rd:  
+select movie_title from movie_table where director_id=(select director_id from director_table where director_name="shankar");
+
+
+
+

@@ -1,0 +1,26 @@
+mysql> use movie_relation
+Database changed
+mysql> create table director(directorid int primary key, directorname varchar(20), directorage varchar(20));
+Query OK, 0 rows affected (0.55 sec)
+
+mysql> create table movies(movieid int primary key, moviename varchar(20),moviereldate date,directorfk int);
+Query OK, 0 rows affected (0.63 sec)
+
+mysql> alter table movies add foreign key (directorfk) references director(directorid);
+Query OK, 0 rows affected (0.96 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> create table actor(actorid int primary key, actorname varchar(20),actorage int);
+Query OK, 0 rows affected (0.50 sec)
+
+mysql> create table mapmovieactor(mapid int primary key, actorfk int, moviefk int);
+Query OK, 0 rows affected (0.57 sec)
+
+mysql> alter table mapmovieactor add foreign key (actorfk) references actor(actorid);
+Query OK, 0 rows affected (0.88 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table mapmovieactor add foreign key (moviefk) references actor(movieid);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> 
+
